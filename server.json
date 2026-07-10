@@ -3,7 +3,7 @@
     "name": "dev.madtaco/mcp",
     "title": "MadTaco",
     "description": "Validate tax IDs, IBANs, and Chilean indicators via MadTaco. Some free tools, no API key required.",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "websiteUrl": "https://madtaco.dev",
     "repository": {
         "url": "https://github.com/madtaco-dev/mcp",
