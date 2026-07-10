@@ -1,5 +1,7 @@
 # @madtaco/mcp
 
+[![smithery badge](https://smithery.ai/badge/madtaco/madtaco-mcp)](https://smithery.ai/servers/madtaco/madtaco-mcp)
+
 MadTaco MCP server — verification and trust checks for AI agents.
 
 Talks only to the public MadTaco API (`https://api.madtaco.dev/v1`). No Laravel dependency; this package is published separately at [github.com/madtaco-dev/mcp](https://github.com/madtaco-dev/mcp).
