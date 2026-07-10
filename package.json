@@ -1,5 +1,6 @@
 {
     "name": "@madtaco/mcp",
+    "mcpName": "dev.madtaco/mcp",
     "version": "1.0.1",
     "description": "MCP server for the MadTaco verification API — tax IDs, IBANs, Chilean indicators, and more.",
     "license": "MIT",
