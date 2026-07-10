@@ -104,11 +104,10 @@ Example with a custom base (local/staging):
 
 ---
 
-## Development
-
-This directory is developed inside the private MadTaco API repo and published to the public [`madtaco-dev/mcp`](https://github.com/madtaco-dev/mcp) repository.
+## Running from source
 
 ```bash
+git clone https://github.com/madtaco-dev/mcp.git
 cd mcp
 npm install
 npm run build
@@ -116,17 +115,9 @@ npm test
 npm start
 ```
 
-Stdio transport only. The server talks exclusively to the MadTaco HTTP API — no database, no secrets beyond an optional API key.
+Stdio transport only. The server calls the public MadTaco HTTP API — no database, no secrets beyond an optional API key.
 
-### Publish checklist
-
-```bash
-# From mcp/ after copying to madtaco-dev/mcp
-npm login
-npm publish --access public
-```
-
-Bump minor versions (1.1.0, 1.2.0, …) as new API endpoints get MCP tools. Update [llms.txt](https://madtaco.dev/llms.txt) when the tool list changes.
+New tools ship as minor releases (1.1, 1.2, …) as the API grows. See [llms.txt](https://madtaco.dev/llms.txt) for the current tool list.
 
 ---
 
