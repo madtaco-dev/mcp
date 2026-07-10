@@ -6,7 +6,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/madtaco-dev/mcp.git"
+        "url": "git+https://github.com/madtaco-dev/mcp.git"
     },
     "keywords": [
         "mcp",
