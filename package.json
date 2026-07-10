@@ -1,0 +1,55 @@
+{
+    "name": "@madtaco/mcp",
+    "version": "1.0.0",
+    "description": "MCP server for the MadTaco verification API — tax IDs, IBANs, Chilean indicators, and more.",
+    "license": "MIT",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/madtaco-dev/mcp.git"
+    },
+    "homepage": "https://madtaco.dev",
+    "bugs": {
+        "url": "https://github.com/madtaco-dev/mcp/issues"
+    },
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "madtaco",
+        "verification",
+        "tax-id",
+        "iban",
+        "claude",
+        "ai-agents"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "bin": {
+        "madtaco-mcp": "./dist/index.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "tsc --watch",
+        "test": "vitest run",
+        "prepublishOnly": "npm run build"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.12.1",
+        "zod": "^3.24.2"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.5",
+        "typescript": "^5.8.2",
+        "vitest": "^3.0.9"
+    }
+}
