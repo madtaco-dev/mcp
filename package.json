@@ -1,57 +1,47 @@
 {
     "name": "@madtaco/mcp",
     "mcpName": "dev.madtaco/mcp",
-    "version": "1.0.3",
-    "description": "MCP server for the MadTaco verification API — tax IDs, IBANs, Chilean indicators, and more.",
+    "version": "1.1.0",
+    "description": "MadTaco MCP server — verification and trust checks for AI agents",
     "license": "MIT",
-    "type": "module",
     "repository": {
         "type": "git",
         "url": "https://github.com/madtaco-dev/mcp.git"
     },
-    "homepage": "https://madtaco.dev",
-    "bugs": {
-        "url": "https://github.com/madtaco-dev/mcp/issues"
-    },
     "keywords": [
         "mcp",
-        "model-context-protocol",
         "madtaco",
         "verification",
-        "tax-id",
-        "iban",
-        "claude",
-        "ai-agents"
+        "sanctions",
+        "agents",
+        "model-context-protocol"
     ],
-    "publishConfig": {
-        "access": "public"
+    "type": "module",
+    "bin": {
+        "madtaco-mcp": "./dist/index.js"
+    },
+    "files": [
+        "dist",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "tsx src/index.ts",
+        "test": "vitest run",
+        "prepublishOnly": "npm run build"
     },
     "engines": {
         "node": ">=18"
     },
-    "files": [
-        "dist",
-        "server.json",
-        "README.md",
-        "LICENSE"
-    ],
-    "bin": {
-        "madtaco-mcp": "./dist/index.js"
-    },
-    "scripts": {
-        "build": "tsc",
-        "start": "node dist/index.js",
-        "dev": "tsc --watch",
-        "test": "vitest run",
-        "prepublishOnly": "npm run build"
-    },
     "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.12.1",
+        "@modelcontextprotocol/sdk": "^1.12.0",
         "zod": "^3.24.2"
     },
     "devDependencies": {
-        "@types/node": "^22.13.5",
-        "typescript": "^5.8.2",
-        "vitest": "^3.0.9"
+        "@types/node": "^22.15.0",
+        "tsx": "^4.19.4",
+        "typescript": "^5.8.3",
+        "vitest": "^3.1.4"
     }
 }

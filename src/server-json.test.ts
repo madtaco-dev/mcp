@@ -10,6 +10,7 @@ const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const serverJson = JSON.parse(readFileSync(join(rootDir, 'server.json'), 'utf8')) as {
     name: string;
     version: string;
+    description: string;
     packages: Array<{ identifier: string; version: string }>;
 };
 

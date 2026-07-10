@@ -2,8 +2,8 @@
     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
     "name": "dev.madtaco/mcp",
     "title": "MadTaco",
-    "description": "Validate tax IDs, IBANs, and Chilean indicators via MadTaco. Some free tools, no API key required.",
-    "version": "1.0.3",
+    "description": "Verification and trust checks for AI agents: validate, screen, propose, accounts, usage.",
+    "version": "1.1.0",
     "websiteUrl": "https://madtaco.dev",
     "repository": {
         "url": "https://github.com/madtaco-dev/mcp",
@@ -14,7 +14,7 @@
             "registryType": "npm",
             "registryBaseUrl": "https://registry.npmjs.org",
             "identifier": "@madtaco/mcp",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "runtimeHint": "npx",
             "transport": {
                 "type": "stdio"
@@ -27,7 +27,7 @@
                 },
                 {
                     "name": "MADTACO_API_KEY",
-                    "description": "Optional X-Api-Key for higher rate limits and future paid tools",
+                    "description": "X-Api-Key for paid checks, usage, and proposals (free tools work without it)",
                     "isRequired": false,
                     "isSecret": true
                 }

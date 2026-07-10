@@ -4,6 +4,11 @@ export type ApiResult<T> =
     | { ok: true; status: number; data: T }
     | { ok: false; status: number; data: unknown };
 
+type RequestOptions = {
+    idempotencyKey?: string;
+    query?: Record<string, string | number | undefined>;
+};
+
 export class MadTacoClient {
     constructor(private readonly baseUrl: string = apiBaseUrl()) {}
 
@@ -15,29 +20,96 @@ export class MadTacoClient {
         return this.post('/validate/iban', { iban });
     }
 
-    async getClIndicator(
-        indicator: string,
-        date?: string,
+    async validateEmail(
+        address: string,
+        mode?: 'syntax' | 'full',
     ): Promise<ApiResult<Record<string, unknown>>> {
-        const path = date
-            ? `/data/cl/${encodeURIComponent(indicator)}/${encodeURIComponent(date)}`
-            : `/data/cl/${encodeURIComponent(indicator)}`;
-
-        return this.get(path);
+        return this.post('/validate/email', { address, ...(mode ? { mode } : {}) });
     }
 
-    private async post(path: string, body: Record<string, string>): Promise<ApiResult<Record<string, unknown>>> {
-        return this.request('POST', path, body);
+    async validatePhone(
+        number: string,
+        mode?: 'format' | 'full',
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/validate/phone', { number, ...(mode ? { mode } : {}) });
     }
 
-    private async get(path: string): Promise<ApiResult<Record<string, unknown>>> {
-        return this.request('GET', path);
+    async screenSanctions(
+        body: Record<string, unknown>,
+        idempotencyKey?: string,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/screen/sanctions', body, { idempotencyKey });
+    }
+
+    async verifyCompany(
+        body: Record<string, unknown>,
+        idempotencyKey?: string,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/verify/company', body, { idempotencyKey });
+    }
+
+    async inspectDomain(
+        domain: string,
+        idempotencyKey?: string,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/inspect/domain', { domain }, { idempotencyKey });
+    }
+
+    async screen(
+        body: Record<string, unknown>,
+        idempotencyKey?: string,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/screen', body, { idempotencyKey });
+    }
+
+    async getScreen(
+        screenId: string,
+        wait?: number,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.get(`/screens/${encodeURIComponent(screenId)}`, {
+            query: wait !== undefined ? { wait } : undefined,
+        });
+    }
+
+    async proposeCheck(body: Record<string, unknown>): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/propose', body);
+    }
+
+    async createAccount(
+        email: string,
+        name?: string,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/accounts', { email, ...(name ? { name } : {}) });
+    }
+
+    async verifyAccount(
+        accountId: string,
+        code: string,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/accounts/verify', { account_id: accountId, code });
+    }
+
+    async getUsage(period?: '7d' | '30d'): Promise<ApiResult<Record<string, unknown>>> {
+        return this.get('/usage', { query: period ? { period } : undefined });
+    }
+
+    private async post(
+        path: string,
+        body: Record<string, unknown>,
+        options: RequestOptions = {},
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.request('POST', path, body, options);
+    }
+
+    private async get(path: string, options: RequestOptions = {}): Promise<ApiResult<Record<string, unknown>>> {
+        return this.request('GET', path, undefined, options);
     }
 
     private async request(
         method: 'GET' | 'POST',
         path: string,
-        body?: Record<string, string>,
+        body?: Record<string, unknown>,
+        options: RequestOptions = {},
     ): Promise<ApiResult<Record<string, unknown>>> {
         const headers: Record<string, string> = {
             Accept: 'application/json',
@@ -49,11 +121,25 @@ export class MadTacoClient {
             headers['X-Api-Key'] = apiKey;
         }
 
+        if (options.idempotencyKey) {
+            headers['Idempotency-Key'] = options.idempotencyKey;
+        }
+
         if (body) {
             headers['Content-Type'] = 'application/json';
         }
 
-        const response = await fetch(`${this.baseUrl}${path}`, {
+        const url = new URL(`${this.baseUrl}${path}`);
+
+        if (options.query) {
+            for (const [key, value] of Object.entries(options.query)) {
+                if (value !== undefined) {
+                    url.searchParams.set(key, String(value));
+                }
+            }
+        }
+
+        const response = await fetch(url, {
             method,
             headers,
             body: body ? JSON.stringify(body) : undefined,
@@ -84,5 +170,22 @@ export function formatApiResult(result: ApiResult<Record<string, unknown>>): {
             },
         ],
         isError: !result.ok,
+    };
+}
+
+export function formatThrownError(error: unknown): {
+    content: Array<{ type: 'text'; text: string }>;
+    isError: boolean;
+} {
+    const message = error instanceof Error ? error.message : String(error);
+
+    return {
+        content: [
+            {
+                type: 'text',
+                text: JSON.stringify({ error: 'tool_error', message }, null, 2),
+            },
+        ],
+        isError: true,
     };
 }

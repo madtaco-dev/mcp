@@ -28,7 +28,7 @@ describe('MadTacoClient', () => {
 
         expect(result.ok).toBe(true);
         expect(fetchMock).toHaveBeenCalledWith(
-            'https://api.madtaco.dev/v1/validate/tax-id',
+            expect.objectContaining({ href: 'https://api.madtaco.dev/v1/validate/tax-id' }),
             expect.objectContaining({
                 method: 'POST',
                 body: JSON.stringify({ id: '11.111.111-1', country: 'CL' }),
@@ -51,36 +51,12 @@ describe('MadTacoClient', () => {
         await client.validateIban('DE89370400440532013000');
 
         expect(fetchMock).toHaveBeenCalledWith(
-            expect.any(String),
+            expect.objectContaining({ href: 'https://api.madtaco.dev/v1/validate/iban' }),
             expect.objectContaining({
                 headers: expect.objectContaining({
                     'X-Api-Key': 'mt_live_test',
                 }),
             }),
-        );
-    });
-
-    it('fetches historical chilean indicators with a date path', async () => {
-        const fetchMock = vi.fn().mockResolvedValue({
-            ok: true,
-            status: 200,
-            json: async () => ({
-                indicator: 'uf',
-                value: 39412.53,
-                currency: 'CLP',
-                as_of: '2026-07-09',
-                credits_charged: 0,
-            }),
-        });
-
-        vi.stubGlobal('fetch', fetchMock);
-
-        const client = new MadTacoClient('https://api.madtaco.dev/v1');
-        await client.getClIndicator('uf', '2026-07-09');
-
-        expect(fetchMock).toHaveBeenCalledWith(
-            'https://api.madtaco.dev/v1/data/cl/uf/2026-07-09',
-            expect.objectContaining({ method: 'GET' }),
         );
     });
 });
