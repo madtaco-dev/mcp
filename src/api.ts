@@ -20,6 +20,12 @@ export class MadTacoClient {
         return this.post('/validate/iban', { iban });
     }
 
+    async lookupInstrument(
+        body: Record<string, unknown>,
+    ): Promise<ApiResult<Record<string, unknown>>> {
+        return this.post('/lookup/instrument', body);
+    }
+
     async validateEmail(
         address: string,
         mode?: 'syntax' | 'full',

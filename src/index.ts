@@ -14,7 +14,7 @@ const checkTypeSchema = z.enum(['sanctions', 'registry', 'domain', 'email', 'pho
 
 const server = new McpServer({
     name: 'madtaco',
-    version: '1.1.0',
+    version: '1.1.3',
 });
 
 const client = new MadTacoClient();
@@ -41,6 +41,39 @@ server.registerTool(
         },
     },
     async ({ iban }) => formatApiResult(await client.validateIban(iban)),
+);
+
+server.registerTool(
+    'lookup_instrument',
+    {
+        description:
+            'Map a ticker, ISIN, CUSIP, or other identifier to FIGI and instrument metadata via OpenFIGI. Free — no API key required.',
+        inputSchema: {
+            id_type: z.string().describe('OpenFIGI idType, e.g. TICKER, ID_ISIN, ID_CUSIP, ID_BB_GLOBAL.'),
+            id_value: z.string().describe('Third-party identifier value to map.'),
+            exchange_code: z.string().optional().describe('Optional exchange code filter (not with mic_code).'),
+            mic_code: z.string().optional().describe('Optional MIC filter (not with exchange_code).'),
+            currency: z.string().optional().describe('Optional ISO 4217 currency filter.'),
+        },
+    },
+    async (args) => {
+        const { id_type, id_value, exchange_code, mic_code, currency } = args;
+        const body: Record<string, unknown> = { id_type, id_value };
+
+        if (exchange_code) {
+            body.exchange_code = exchange_code;
+        }
+
+        if (mic_code) {
+            body.mic_code = mic_code;
+        }
+
+        if (currency) {
+            body.currency = currency;
+        }
+
+        return formatApiResult(await client.lookupInstrument(body));
+    },
 );
 
 server.registerTool(

@@ -7,6 +7,7 @@ describe('TOOL_NAMES', () => {
         expect([...TOOL_NAMES]).toEqual([
             'validate_tax_id',
             'validate_iban',
+            'lookup_instrument',
             'validate_email',
             'validate_phone',
             'screen_sanctions',
