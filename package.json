@@ -1,7 +1,7 @@
 {
     "name": "@madtaco/mcp",
     "mcpName": "dev.madtaco/mcp",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "MadTaco MCP server — verification and trust checks for AI agents",
     "license": "MIT",
     "repository": {
