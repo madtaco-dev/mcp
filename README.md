@@ -1,4 +1,6 @@
-# @madtaco/mcp
+# 🌮 MadTaco — MCP Server
+
+**npm:** [`@madtaco/mcp`](https://www.npmjs.com/package/@madtaco/mcp)
 
 [![smithery badge](https://smithery.ai/badge/madtaco/madtaco-mcp)](https://smithery.ai/servers/madtaco/madtaco-mcp)
 
